@@ -36,4 +36,5 @@
 
 - [from_logits = True](https://datascience.stackexchange.com/questions/73093/what-does-from-logits-true-do-in-sparsecategoricalcrossentropy-loss-function#:~:text=4,to%20produce%20a%20probability%20distribution.)
 - [tfds.load](https://www.tensorflow.org/datasets/api_docs/python/tfds/load)
+- [matplotlib legend position](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.legend.html)
 

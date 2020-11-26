@@ -214,3 +214,7 @@ fabric.properties
 
 .idea/
 
+## TensorBoard
+
+logs/
+
