@@ -121,9 +121,11 @@ val_ds = val_ds.batch(batch_size).cache().prefetch(buffer_size=AUTOTUNE).map(vec
 
 model = tf.keras.Sequential([
     keras.layers.Embedding(max_features + 1, embedding_dim),
+    keras.layers.Conv1D(128, 5, activation='relu'),
     keras.layers.Dropout(0.2),
     keras.layers.GlobalAveragePooling1D(),
     keras.layers.Dropout(0.2),
+    keras.layers.Dense(64, activation='relu'),
     keras.layers.Dense(1)])
 
 model.summary()
@@ -134,7 +136,7 @@ model.compile(loss=keras.losses.BinaryCrossentropy(from_logits=True),
 
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir="logs")
 
-epochs = 50
+epochs = 20
 history = model.fit(train_ds, validation_data=val_ds, epochs=epochs, callbacks=[tensorboard_callback])
 
 
@@ -166,7 +168,7 @@ print("Accuracy: ", accuracy)
 transformed_test_ds = test_ds.batch(batch_size).cache().prefetch(buffer_size=AUTOTUNE).map(vectorize_text)
 
 predictions = model.predict(transformed_test_ds)
-score = tf.nn.softmax(predictions)
+score = tf.nn.sigmoid(predictions)
 
 iterator = iter(test_ds)
 for i in range(15):
