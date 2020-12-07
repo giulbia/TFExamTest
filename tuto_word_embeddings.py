@@ -119,11 +119,25 @@ val_ds = val_ds.batch(batch_size).cache().prefetch(buffer_size=AUTOTUNE).map(vec
 
 # MODEL #
 
+# model = tf.keras.Sequential([
+#     keras.layers.Embedding(max_features + 1, embedding_dim),
+#     keras.layers.Conv1D(128, 5, activation='relu'),
+#     keras.layers.Dropout(0.2),
+#     keras.layers.GlobalAveragePooling1D(),
+#     keras.layers.Dropout(0.2),
+#     keras.layers.Dense(64, activation='relu'),
+#     keras.layers.Dense(1)])
+
+# Alternative
 model = tf.keras.Sequential([
-    keras.layers.Embedding(max_features + 1, embedding_dim),
-    keras.layers.Conv1D(128, 5, activation='relu'),
+    keras.layers.Embedding(max_features + 1, embedding_dim, mask_zero=True),
+    keras.layers.Conv1D(64, 7, activation='relu'),
     keras.layers.Dropout(0.2),
-    keras.layers.GlobalAveragePooling1D(),
+    keras.layers.MaxPooling1D(),
+    keras.layers.Dropout(0.2),
+    keras.layers.Conv1D(64, 7, activation='relu'),
+    keras.layers.Dropout(0.2),
+    keras.layers.GlobalMaxPooling1D(),
     keras.layers.Dropout(0.2),
     keras.layers.Dense(64, activation='relu'),
     keras.layers.Dense(1)])
