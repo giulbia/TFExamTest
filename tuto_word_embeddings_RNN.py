@@ -77,10 +77,10 @@ print("3rd class is unsupervised")
 
 # PREP DATA #
 AUTOTUNE = tf.data.experimental.AUTOTUNE
-batch_size = 1024
+batch_size = 512
 
 max_features = 10000  # Maximum vocab size.
-max_len = 200  # Sequence length to pad the outputs to
+max_len = 500  # Sequence length to pad the outputs to
 embedding_dim = 16
 
 vectorize_layer = keras.layers.experimental.preprocessing.TextVectorization(
@@ -120,26 +120,15 @@ val_ds = val_ds.batch(batch_size).cache().prefetch(buffer_size=AUTOTUNE).map(vec
 # MODEL #
 
 # model = tf.keras.Sequential([
-#     keras.layers.Embedding(max_features + 1, embedding_dim),
-#     keras.layers.Conv1D(128, 5, activation='relu'),
-#     keras.layers.Dropout(0.2),
-#     keras.layers.GlobalAveragePooling1D(),
-#     keras.layers.Dropout(0.2),
-#     keras.layers.Dense(64, activation='relu'),
+#     keras.layers.Embedding(max_features + 1, embedding_dim, mask_zero=True),
+#     # keras.layers.SimpleRNN(32, return_sequences=True), OVERFIT À fond
+#     keras.layers.SimpleRNN(32),
 #     keras.layers.Dense(1)])
 
-# Alternative
 model = tf.keras.Sequential([
     keras.layers.Embedding(max_features + 1, embedding_dim, mask_zero=True),
-    keras.layers.Conv1D(64, 7, activation='relu'),
-    keras.layers.Dropout(0.2),
-    keras.layers.MaxPooling1D(),
-    keras.layers.Dropout(0.2),
-    keras.layers.Conv1D(64, 7, activation='relu'),
-    keras.layers.Dropout(0.2),
-    keras.layers.GlobalMaxPooling1D(),
-    keras.layers.Dropout(0.2),
-    keras.layers.Dense(64, activation='relu'),
+    keras.layers.LSTM(32, return_sequences=True),
+    keras.layers.LSTM(32),
     keras.layers.Dense(1)])
 
 model.summary()
